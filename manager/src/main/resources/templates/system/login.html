@@ -1,42 +1,10 @@
-<!DOCTYPE html>
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:insert="/base/resources :: resources">
+<head>
     <link rel="stylesheet" type="text/css" th:href="@{/static/css/console.css}"/>
+    <th:block th:insert="/base/resources :: resources"></th:block>
     <title>后台登录</title>
-    <script type="text/javascript">
-        function login(){
-            $.post('<%=request.getContextPath()%>/system/login',
-                    {
-                        loginName:$("#loginName").val(),
-                        password:$("#password").val(),
-                        validateCode:$("#validateKey").val()
-                    },
-                    function(data){
-                    var data = eval( "(" + data + ")" );
-                    if(data.state==1){
-                        window.location.href = "<%=request.getContextPath()%>/system/main";
-                    } else {
-                        reloadImg();
-                        xcsoft.error(data.content,5000);
-                        $("#tip").html(data.content);
-                    }
-                });
-        }
-        function reloadImg() {
-            var t = new Date().getTime();
-            $("#validateCodeImg").attr("src","@{/validate/validateCode?type=loginValidateCode&t=}" + t);
-        }
-        document.onkeydown = function(event_e) {
-            if (window.event){
-                event_e = window.event;
-            }
-            var int_keycode = event_e.charCode || event_e.keyCode;
-            if (int_keycode == 13) {
-                login();
-            }
-        }
-
-    </script>
+    <script></script>
 </head>
 <body>
 	<div class="login_bg">
@@ -69,4 +37,37 @@
      </div>
     </div>
 </body>
+<script>
+    function reloadImg() {
+        var t = new Date().getTime();
+        $("#validateCodeImg").attr("src","[[@{/validate/validateCode?type=loginValidateCode&t=}]]" + t);
+    }
+    document.onkeydown = function(event_e) {
+        if (window.event){
+            event_e = window.event;
+        }
+        var int_keycode = event_e.charCode || event_e.keyCode;
+        if (int_keycode == 13) {
+            login();
+        }
+    }
+    function login(){
+        $.post('<%=request.getContextPath()%>/system/login',
+            {
+                loginName:$("#loginName").val(),
+                password:$("#password").val(),
+                validateCode:$("#validateKey").val()
+            },
+            function(data){
+                var data = eval( "(" + data + ")" );
+                if(data.state==1){
+                    window.location.href = "<%=request.getContextPath()%>/system/main";
+                } else {
+                    reloadImg();
+                    xcsoft.error(data.content,5000);
+                    $("#tip").html(data.content);
+                }
+            });
+    }
+</script>
 </html>

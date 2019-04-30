@@ -21,7 +21,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.chw.basic.constant.CommonConstant;
-import com.chw.dao.model.system.SysUser;
 import com.chw.service.system.SysMenuService;
 import com.chw.service.system.SysRoleService;
 import com.chw.service.system.SysUserService;
