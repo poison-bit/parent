@@ -29,7 +29,7 @@ spring:
   quartz:
     enabled: true
     
-mybatis:
+mybatis-plus:
   mapperLocations: classpath:/mapper/**/*.xml
   config-location: classpath:/config/mybatis-config.xml
   

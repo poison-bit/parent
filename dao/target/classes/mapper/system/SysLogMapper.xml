@@ -1,13 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.chw.dao.mapper.system.SysLogMapper" >
-  <resultMap id="BaseResultMap" type="com.chw.dao.model.system.SysLog" >
-    <id column="log_id" property="logId" jdbcType="BIGINT" />
-    <result column="user_id" property="userId" jdbcType="BIGINT" />
-    <result column="event_name" property="eventName" jdbcType="VARCHAR" />
-    <result column="log_type" property="logType" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="user_ip" property="userIp" jdbcType="VARCHAR" />
-    <result column="description" property="description" jdbcType="VARCHAR" />
-  </resultMap>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chw.dao.mapper.system.SysLogDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.chw.dao.model.system.SysLog">
+        <id column="log_id" property="logId" />
+        <result column="event_name" property="eventName" />
+        <result column="log_type" property="logType" />
+        <result column="user_id" property="userId" />
+        <result column="create_time" property="createTime" />
+        <result column="user_ip" property="userIp" />
+        <result column="description" property="description" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        log_id, event_name, log_type, user_id, create_time, user_ip, description
+    </sql>
+
 </mapper>

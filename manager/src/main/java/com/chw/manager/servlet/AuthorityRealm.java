@@ -1,16 +1,12 @@
 package com.chw.manager.servlet;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.chw.basic.constant.CommonConstant;
+import com.chw.dao.model.system.SysUser;
+import com.chw.service.system.ISysMenuService;
+import com.chw.service.system.ISysRoleService;
+import com.chw.service.system.ISysUserService;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -20,21 +16,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.chw.basic.constant.CommonConstant;
-import com.chw.service.system.SysMenuService;
-import com.chw.service.system.SysRoleService;
-import com.chw.service.system.SysUserService;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AuthorityRealm extends AuthorizingRealm {
 
 	@Autowired
-	private SysUserService sysUserService;
+	private ISysUserService sysUserService;
 
 	@Autowired
-	private SysRoleService sysRoleService;
+	private ISysRoleService sysRoleService;
 
 	@Autowired
-	private SysMenuService sysMenuService;
+	private ISysMenuService sysMenuService;
 
 	/**
 	 * 登录认证，创建用户的登录信息
@@ -44,7 +39,7 @@ public class AuthorityRealm extends AuthorizingRealm {
 			throws AuthenticationException {
 		UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
 		String loginName = token.getUsername();
-		SysUser user = sysUserService.selectUserByLoginName(loginName);
+		SysUser user = sysUserService.selectOne(new EntityWrapper<SysUser>().eq("loginName",loginName));
 
 		if (user == null) {
 			throw new UnknownAccountException();

@@ -1,227 +1,27 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.chw.dao.mapper.system.SysUserMapper" >
-  <resultMap id="BaseResultMap" type="com.chw.dao.model.system.SysUser" >
-    
-    <id column="user_id" property="userId" jdbcType="BIGINT" />
-    <result column="login_name" property="loginName" jdbcType="VARCHAR" />
-    <result column="user_credentials" property="userCredentials" jdbcType="VARCHAR" />
-    <result column="password" property="password" jdbcType="VARCHAR" />
-    <result column="user_name" property="userName" jdbcType="VARCHAR" />
-    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
-    <result column="mobilephone" property="mobilephone" jdbcType="VARCHAR" />
-    <result column="sex" property="sex" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
-    <result column="state" property="state" jdbcType="VARCHAR" />
-    <result column="num" property="num" jdbcType="INTEGER" />
-    <result column="img" property="img" jdbcType="VARCHAR" />
-  </resultMap>
-  
-  <select id="querySysUserList" parameterType="java.util.Map" resultMap="BaseResultMap">
-		SELECT
-			a.*
-		FROM
-			sys_user a left join sys_user_role b on a.user_id = b.user_id
-			left join sys_role c on b.role_id = c.role_id
-		WHERE
-			1 = 1
-		<if test="loginName!=null and loginName!=''">
-			and a.login_name like CONCAT('%',#{loginName},'%')
-		</if>
-		<if test="userName!=null and userName!=''">
-			and a.user_name like CONCAT('%',#{userName},'%')
-		</if>
-		<if test="userId!=null and userId!=''">
-			and a.user_id = #{userId}
-		</if>
-  </select>
-  
-  
-  <select id="queryTransSysUserList" parameterType="java.util.Map" resultMap="BaseResultMap">
-		SELECT
-			a.*
-		FROM
-			sys_user a left join sys_user_role b on a.user_id = b.user_id
-			left join sys_role c on b.role_id = c.role_id
-		WHERE
-			c.is_admin not in (1,2)
-			and c.role_name not in ('任务','测试')
-		<if test="stationId!=null and stationId!=''">
-			and a.station_id = #{stationId}
-		</if>
-		<if test="userName!=null and userName!=''">
-			and a.user_name like CONCAT('%',#{userName},'%')
-		</if>
-  </select>
-  
-  <select id="querySysUser" parameterType="java.util.Map" resultMap="BaseResultMap">
-		select * from sys_user a where a.login_name= #{loginName} and a.password=#{password}
-  </select>
-  
-  <select id="queryUserByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
-		SELECT * FROM sys_user a where a.user_id = #{userId}
-  </select>
-  
-    <select id="queryUserByLoginName" parameterType="java.lang.String" resultMap="BaseResultMap">
-		select * from sys_user a where a.login_name= #{loginName}
-  </select>
-  
-   <select id="selectSysUserListByuserType" parameterType="java.util.Map" resultType="java.util.HashMap">
-		SELECT
-	
-			a.user_id userId,a.user_name userName,a.classification classification,a.telephone,a.longitude,a.latitude,a.img,a.big_img bigImg,a.description,a.station_id stationId,a.user_type userType,a.address,a.title,a.cinema_id,a.venue_id,case when a.click is null or a.click = '' then 0 else a.click end click,
-			case when a.consumption is null or a.consumption = '' then 0 else a.consumption end consumption,b.`name` userTypeName
-		FROM
-			sys_user a
-			LEFT JOIN datainfo b ON a.user_type=b.datainfo_id
-		WHERE
-			1 = 1
-		<if test="userType!=null and userType!=''">
-			and a.user_type =#{userType}
-		</if>
-		<if test="isRed!=null and isRed!=''">
-			and a.is_red =#{isRed}
-		</if>
-		<if test="stationId!=null and stationId!=''">
-			and a.station_id =#{stationId}
-		</if>
-		<if test="state!=null and state!=''">
-			and a.state =#{state}
-		</if>
-		<if test="roleId!=null and roleId!=''">
-			and a.user_id in(select user_id from sys_user_role where role_id=#{roleId}) 
-		</if>
-	
-		<if test="cinemaId!=null and cinemaId!=''">
-			and a.cinema_id =#{cinemaId}
-		</if>
-		<if test="venueId!=null and venueId!=''">
-			and a.venue_id =#{venueId}
-		</if> 
-		<if test="isGeneral!=null and isGeneral!=''">
-			AND (
-				a.cinema_id IS NULL
-				OR a.cinema_id = 0
-			)
-			AND (
-				a.venue_id IS NULL
-				OR a.venue_id = 0
-			)
-			AND (
-				a.ice_id IS NULL
-				OR a.ice_id = 0
-			)
-		</if>
-		<if test="keyword!=null and keyword!=''">
-			AND (a.user_name like CONCAT('%',#{keyword},'%') OR a.login_name like CONCAT('%',#{keyword},'%'))
-		</if>
-		 <if test="top!=null and top!=''">
-			 limit #{top}
-		</if>
-		 <if test="sortType!=null and sortType!='' ">
-			 <if test="sortType=='isDefult'">
-			 	ORDER BY a.create_time desc,a.user_id
-			 </if>
-			 <if test="sortType=='clickUp'">
-			 	ORDER BY a.click asc
-			 </if>
-			 <if test="sortType=='clickDown'">
-			 	ORDER BY a.click desc
-			 </if>
-			 <if test="sortType=='conUp'">
-			 	ORDER BY a.consumption asc
-			 </if>
-			 <if test="sortType=='conDown'">
-			 	ORDER BY a.consumption desc
-			 </if>
-		 </if>
-  </select>
-  
-   <select id="selectSysUserListByType" parameterType="java.util.Map" resultType="java.util.HashMap">
-		SELECT
-	
-			case when a.click is null or a.click = '' then 0 else a.click end click,
-			case when a.consumption is null or a.consumption = '' then 0 else a.consumption end consumption,a.user_id userId,a.user_name userName,a.telephone,a.longitude,a.latitude,a.img,a.big_img bigImg,a.description,a.station_id stationId,a.user_type userType,a.address,a.title,a.cinema_id cinemaId,a.venue_id venueId
-		FROM
-			sys_user a
-		WHERE
-			1 = 1
-		<if test="userType!=null and userType!=''">
-			and a.user_type =#{userType}
-		</if>
-		<if test="isRed!=null and isRed!=''">
-			and a.is_red =#{isRed}
-		</if>
-		<if test="stationId!=null and stationId!=''">
-			and a.station_id =#{stationId}
-		</if>
-		<if test="state!=null and state!=''">
-			and a.state =#{state}
-		</if>
-		<if test="roleId!=null and roleId!=''">
-			and a.user_id in(select user_id from sys_user_role where role_id=#{roleId}) 
-		</if>
-	
-		<if test="cinemaId!=null and cinemaId!=''">
-			and a.cinema_id =#{cinemaId}
-		</if>
-		<if test="venueId!=null and venueId!=''">
-			and a.venue_id =#{venueId}
-		</if> 
-		<if test="isGeneral!=null and isGeneral!=''">
-			AND (
-				a.cinema_id IS NULL
-				OR a.cinema_id = 0
-			)
-			AND (
-				a.venue_id IS NULL
-				OR a.venue_id = 0
-			)
-			AND (
-				a.ice_id IS NULL
-				OR a.ice_id = 0
-			)
-		</if>
-		 <if test="top!=null and top!=''">
-			 limit #{top}
-		</if>
-		
-		<if test="listType == 2 or listType == '2'">
-			 order by a.click desc
-		</if>
-		
-		<if test="listType == 3 or listType == '3'">
-			 order by a.title asc
-		</if>
-		
-		<if test="listType == 4 or listType == '4'">
-			 order by a.title desc
-		</if>
-		
-		
-  </select>
-   
-  
-   <select id="selectUserByShopId" parameterType="java.lang.Long"   resultType="java.util.HashMap">
-		SELECT a.user_id userId,a.classification classification,a.user_name userName,a.telephone,a.longitude,a.latitude,a.img,a.big_img bigImg,a.description,a.station_id stationId,a.user_type userType,a.address,a.notice
-		,a.start_time startTime,a.end_time endTime,a.distribution_ids,a.cinema_id,a.venue_id,a.is_pay isPay
-		 FROM sys_user a  
-		 where a.user_id = #{userId}
-  </select>
-  
-  <select id="querySysUserListByRole" resultMap="BaseResultMap">
-		SELECT
-			*
-		FROM
-			sys_user a
-		LEFT JOIN sys_user_role b ON a.user_id = b.user_id
-		LEFT JOIN sys_role c ON b.role_id = c.role_id
-		WHERE
-			a.user_name NOT IN ('task', '', '')
-		AND a.state = 1
-		AND c.is_admin = 0
-  </select>
-  
-   
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chw.dao.mapper.system.SysUserDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.chw.dao.model.system.SysUser">
+        <id column="user_id" property="userId" />
+        <result column="login_name" property="loginName" />
+        <result column="user_credentials" property="userCredentials" />
+        <result column="password" property="password" />
+        <result column="user_name" property="userName" />
+        <result column="mobile" property="mobile" />
+        <result column="telephone" property="telephone" />
+        <result column="sex" property="sex" />
+        <result column="create_time" property="createTime" />
+        <result column="last_login_time" property="lastLoginTime" />
+        <result column="state" property="state" />
+        <result column="num" property="num" />
+        <result column="img" property="img" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        user_id, login_name, user_credentials, password, user_name, mobile, telephone, sex, create_time, last_login_time, state, num, img
+    </sql>
+
 </mapper>

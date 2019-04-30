@@ -1,136 +1,30 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.chw.dao.mapper.system.SysMenuMapper" >
-  <resultMap id="BaseResultMap" type="com.chw.dao.model.system.SysMenu" >
-    <!--
-      WARNING - @mbggenerated
-    -->
-    <id column="menu_id" property="menuId" jdbcType="BIGINT" />
-    <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
-    <result column="parent_menu_name" property="parentMenuName" jdbcType="VARCHAR" />
-    <result column="menu_url" property="menuUrl" jdbcType="VARCHAR" />
-    <result column="menu_type" property="menuType" jdbcType="INTEGER" />
-    <result column="parent_id" property="parentId" jdbcType="BIGINT" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="sort" property="sort" jdbcType="INTEGER" />
-    <result column="level" property="level" jdbcType="INTEGER" />
-    <result column="is_open" property="isOpen" jdbcType="VARCHAR" />
-    <result column="target" property="target" jdbcType="VARCHAR" />
-    <result column="state" property="state" jdbcType="INTEGER" />
-    <result column="icon" property="icon" jdbcType="VARCHAR" />
-    <result column="icon_open" property="iconOpen" jdbcType="VARCHAR" />
-    <result column="icon_close" property="iconClose" jdbcType="VARCHAR" />
-    <result column="icon_skin" property="iconSkin" jdbcType="VARCHAR" />
-  </resultMap>
-  
-  <select id="queryMenuList" parameterType="java.util.Map" resultMap="BaseResultMap">
-		SELECT
-			DISTINCT
-			d.menu_id,
-			d.parent_id,
-			d. LEVEL,
-			d.menu_name,
-			d.menu_url,
-			d.is_open,
-			d.sort,
-			d.target,
-			d.icon,
-			d.icon_open,
-			d.icon_close,
-			d.icon_skin
-		FROM
-			sys_user a,
-			sys_user_role b,
-			sys_role_menu c,
-			sys_menu d
-		WHERE
-			a.user_id = b.user_id
-		AND b.role_id = c.role_id
-		AND c.menu_id = d.menu_id
-		AND d.state = 1
-		AND d.menu_type = 0
-		<if test="userId!=null and userId!=''">
-			AND a.user_id = #{userId}
-		</if>
-  </select>
-  
-  <select id="queryMenuNameList" parameterType="java.util.Map" resultType="java.lang.String">
-		SELECT	
-			d.menu_url AS menuName
-		FROM
-			sys_user a,
-			sys_user_role b,
-			sys_role_menu c,
-			sys_menu d
-		WHERE
-			a.user_id = b.user_id
-		AND b.role_id = c.role_id
-		AND c.menu_id = d.menu_id
-		AND d.state = 1
-		AND d.menu_type = 1
-		<if test="userId!=null and userId!=''">
-			AND a.user_id = #{userId}
-		</if>
-  </select>
-  
-  <select id="queryAllMenuList" resultType="com.chw.basic.model.ZtreeVO" parameterType="java.util.Map">
-		SELECT
-			a.menu_id id,
-			a.parent_id pId,
-			a. LEVEL 'level',
-			a.menu_name NAME,
-			a.menu_url openUrl,
-			a.is_open OPEN,
-			a.sort,
-			a.target
-		FROM
-			sys_menu a
-		<where>
-			<if test="state!=null and state!=''">
-				AND a.state = 1
-			</if>
-		</where>
-  </select>
-  
-  <select id="queryOptionMenuList" resultMap="BaseResultMap">
-			SELECT * FROM sys_menu a where a.state = 1
-  </select>
-  
-  <select id="querySysMenuList" parameterType="java.util.Map" resultMap="BaseResultMap">
-		SELECT
-			*
-		FROM
-			sys_menu a
-		WHERE
-			1 = 1
-		<if test="menuName!=null and menuName!=''">
-			and menu_name like CONCAT('%',#{menuName},'%')
-		</if>
-  </select>
-  
-  <select id="queryMaxSort" resultType="java.lang.Integer">
-		SELECT MAX(a.sort) FROM sys_menu a
-  </select>
-  
-  <select id="queryMenuByMenuId" parameterType="java.lang.Long" resultMap="BaseResultMap">
-		SELECT
-			a.*, b.menu_name parent_menu_name
-		FROM
-			sys_menu a
-		LEFT JOIN sys_menu b ON a.parent_id = b.menu_id
-		WHERE
-			a.menu_id = #{menuId}
-  </select>
-  
-  <select id="queryGrantMenuList" parameterType="java.util.HashMap" resultMap="BaseResultMap">
-		SELECT
-			b.*
-		FROM
-			sys_role_menu a,
-			sys_menu b
-		WHERE
-			a.menu_id = b.menu_id
-		AND a.role_id = #{roleId}
-  </select>
-  
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chw.dao.mapper.system.SysMenuDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.chw.dao.model.system.SysMenu">
+        <id column="menu_id" property="menuId" />
+        <result column="menu_name" property="menuName" />
+        <result column="parent_menu_name" property="parentMenuName" />
+        <result column="menu_url" property="menuUrl" />
+        <result column="menu_type" property="menuType" />
+        <result column="parent_id" property="parentId" />
+        <result column="create_time" property="createTime" />
+        <result column="sort" property="sort" />
+        <result column="level" property="level" />
+        <result column="is_open" property="isOpen" />
+        <result column="target" property="target" />
+        <result column="state" property="state" />
+        <result column="icon_open" property="iconOpen" />
+        <result column="icon_close" property="iconClose" />
+        <result column="icon_skin" property="iconSkin" />
+        <result column="icon" property="icon" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        menu_id, menu_name, parent_menu_name, menu_url, menu_type, parent_id, create_time, sort, level, is_open, target, state, icon_open, icon_close, icon_skin, icon
+    </sql>
+
 </mapper>
