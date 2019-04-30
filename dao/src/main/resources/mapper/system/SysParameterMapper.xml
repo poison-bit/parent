@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chw.dao.mapper.system.SysParameterMapper">
+  <resultMap id="BaseResultMap" type="com.chw.dao.model.system.SysParameter">
+    <id column="sys_parameter_id" jdbcType="BIGINT" property="sysParameterId" />
+    <result column="par_name" jdbcType="VARCHAR" property="parName" />
+    <result column="par_code" jdbcType="VARCHAR" property="parCode" />
+    <result column="par_type" jdbcType="VARCHAR" property="parType" />
+    <result column="par_value" jdbcType="VARCHAR" property="parValue" />
+    <result column="par_remark" jdbcType="VARCHAR" property="parRemark" />
+  </resultMap>
+  
+  <select id="selectSysParameter" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT sys_parameter_id,par_name,par_code,par_type,par_value,par_remark FROM SYS_PARAMETER
+		<where>
+		
+		<if test="parName!=null and parName!=''">
+			 par_name like '%${parName}%'
+		</if>
+		<if test="parCode!=null and parCode!=''">
+			and par_code like '%${parCode}%' 
+		</if>
+		<if test="parType!=null and parType!=''">
+			and par_type like '%${parType}%'
+		</if>
+		<if test="parValue!=null and parValue!=''">
+			and par_value like '%${parValue}%'
+		</if>
+		<if test="parRemark!=null and parRemark!=''">
+			and par_remark = #{parRemark}
+		</if>
+		</where>
+		<if test="sort!=null and sort!=''">
+			<if test="sort='parName'">
+				ORDER BY par_name ${order}
+			</if>
+			<if test="sort=='parCode'">
+				ORDER BY par_code ${order}
+			</if>
+			<if test="sort=='parType'">
+				ORDER BY par_type ${parType}
+			</if>
+			<if test="sort=='parValue'">
+				ORDER BY par_value ${order}
+			</if>
+			<if test="sort=='parRemark'">
+			ORDER BY par_remark ${parRemark}
+		</if>
+		</if>
+		
+	</select>
+	
+	<select id="getSysParameterList" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT * FROM SYS_PARAMETER a WHERE a.par_code in (${parCode})
+	</select>
+	
+	<select id="getSysParameterByCode" resultType="com.chw.dao.model.system.SysParameter">
+		SELECT * FROM SYS_PARAMETER a WHERE a.par_code = #{0}
+	</select>
+</mapper>

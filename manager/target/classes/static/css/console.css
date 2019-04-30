@@ -1,0 +1,212 @@
+/*初始化代码*/
+a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas,caption,center, cite,code, dd, del, details, dfn, div, dl, dt, em,embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p,pre, q, ruby, s, samp, section,small, span, strike, strong,sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video{
+    margin:0;
+    padding:0;
+    border:0;
+    /* font: inherit; */
+    vertical-align:baseline;
+    /*word-break:break-all;*/
+    word-wrap:break-word;
+    font-style: normal;
+}
+input{
+    white-space:nowrap;
+    margin:0;
+    padding:0;
+}
+input:-webkit-autofill {
+    -webkit-box-shadow:0 0 0px 1000px #fff inset;
+}
+*{
+    background-repeat:no-repeat;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+ul,li,ol{
+    list-style:none;
+}
+img{
+    border:none;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+html, body{
+    width:100%;
+    height:100%;
+    background-color: #f8f8f8;
+}
+
+a{
+    text-decoration:none;
+    border:none;
+    outline:none;
+    tap-highlight-color: rgba(0,0,0,0);
+    focus-ring-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-focus-ring-color: rgba(0,0,0,0);
+    -moz-tap-highlight-color: rgba(0,0,0,0);
+    -moz-focus-ring-color: rgba(0,0,0,0);
+}
+a:visited{
+    color: inherit;
+}
+input,button{
+    outline:none;
+    border:none;
+    font-weight:normal;
+}
+
+/*常用样式*/
+*{
+    font-family:"微软雅黑";
+    font-size: 16px;
+}
+
+.fl{
+    float:left;
+}
+
+.fr{
+    float:right;
+}
+
+.clear:after{
+    content: " ";
+    display: block;
+    clear: both;
+    height: 0;
+}
+/******修改placeholder颜色********/
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #c5c5c5; 
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #c5c5c5;
+}
+
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+    color: #c5c5c5;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+    color: #c5c5c5;
+
+}
+.login_bg{
+    width: 100%;
+    min-width: 1200px;
+    height: 100%;
+    /*background: url('../img/BG.png') no-repeat;*/
+    background-size: cover;
+    position: relative;
+}
+.login_content{
+    width: 1000px;
+    height: 556px;
+    background-color: #fff;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -500px;
+    margin-top: -278px;
+}
+.login_box{
+    width: 1000px;
+    height: 556px;
+    /*display: flex;*/
+}
+.login_left{
+    width: 523px;
+    height: 556px;
+    background-color: #528ce5;
+    float: left;
+}
+.login_left img{
+    display: block;
+    width: 205px;
+    height: 112px;
+    margin: 0 auto;
+    padding-top: 218px;
+}
+.login_right{
+    width: 407px;
+    height: 556px;
+    padding-left: 70px;
+    float: left;
+}
+.login_right h5{
+    font-size: 30px;
+    color: #333;
+    line-height: 66px;
+    padding-top: 54px;
+}
+.login_li{
+    width: 100%;
+}
+.login_li p{
+    font-size: 14px;
+    color: #474747;
+    line-height: 34px;
+    padding-top: 10px;
+}
+.login_li>input{
+    width: 310px;
+    height: 16px;
+    background-color: #f4f4f4;
+    padding: 17px 0;
+    padding-left: 17px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+}
+.yzm{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+.yzm>input{
+    width: 170px;
+    height: 16px;
+    background-color: #f4f4f4;
+    padding: 17px 0;
+    padding-left: 17px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+    float: left;
+}
+.yzm>img{
+    display: block;
+    width: 120px;
+    height: 46px;
+    margin-left: 12px;
+    float: left;
+}
+.btn_login{
+    width: 327px;
+    height: 50px;
+    background-color: #4381e2;
+    margin-top: 22px;
+    font-size: 16px;
+    color: #fff;
+    line-height: 50px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.login_bottom{
+    width:1000px;
+    height:15px;
+    line-height: 15px;
+    font-size:14px;
+    font-family:PingFang-SC-Medium;
+    font-weight:500;
+    color:#47638c;
+    line-height:36px;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    bottom: -120px;
+}

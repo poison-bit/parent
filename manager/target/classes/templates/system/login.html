@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="/base/resources :: resources">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/console.css}"/>
+    <title>后台登录</title>
+    <script type="text/javascript">
+        function login(){
+            $.post('<%=request.getContextPath()%>/system/login',
+                    {
+                        loginName:$("#loginName").val(),
+                        password:$("#password").val(),
+                        validateCode:$("#validateKey").val()
+                    },
+                    function(data){
+                    var data = eval( "(" + data + ")" );
+                    if(data.state==1){
+                        window.location.href = "<%=request.getContextPath()%>/system/main";
+                    } else {
+                        reloadImg();
+                        xcsoft.error(data.content,5000);
+                        $("#tip").html(data.content);
+                    }
+                });
+        }
+        function reloadImg() {
+            var t = new Date().getTime();
+            $("#validateCodeImg").attr("src","@{/validate/validateCode?type=loginValidateCode&t=}" + t);
+        }
+        document.onkeydown = function(event_e) {
+            if (window.event){
+                event_e = window.event;
+            }
+            var int_keycode = event_e.charCode || event_e.keyCode;
+            if (int_keycode == 13) {
+                login();
+            }
+        }
+
+    </script>
+</head>
+<body>
+	<div class="login_bg">
+     <div class="login_content">
+     <div class="login_box">
+         <div class="login_left">
+             <!-- <img src="<%=request.getContextPath()%>/images/LOGO1.png"> -->
+         </div>
+         <div class="login_right">
+             <h5>登录</h5>
+             <div class="login_li">
+                 <p>账号</p>
+                 <input type="text" id="loginName" name="loginName" placeholder="请输入账号">
+             </div>
+             <div class="login_li">
+                 <p>密码</p>
+                 <input type="password" id="password" name="password" placeholder="请输入密码">
+             </div>
+             <div class="login_li">
+                 <p>验证码</p>
+                 <div class="yzm">
+                 <input type="text" id="validateKey" name="validateKey" placeholder="请输入验证码">
+                 <img id="validateCodeImg" class="validateCodeImg" onclick="reloadImg()" th:src="@{/validate/validateCode?type=loginValidateCode}">
+                 </div>
+             </div>
+             <div class="btn_login" onclick="login();" id="denglu">登录</div>
+         </div>
+     </div>
+     <div class="login_bottom">后台管理 © chw © All Rights Reserved</div>
+     </div>
+    </div>
+</body>
+</html>

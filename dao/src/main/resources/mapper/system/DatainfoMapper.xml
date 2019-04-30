@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chw.dao.mapper.system.DatainfoMapper">
+	<resultMap id="BaseResultMap" type="com.chw.dao.model.system.Datainfo">
+		<id column="datainfo_id" jdbcType="BIGINT" property="datainfoId" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="code" jdbcType="VARCHAR" property="code" />
+		<result column="type_desc" jdbcType="VARCHAR" property="typeDesc" />
+		<result column="pinyin" jdbcType="VARCHAR" property="pinyin" />
+		<result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+		<result column="parent_id" jdbcType="BIGINT" property="parentId" />
+	</resultMap>
+
+	<select id="selectDatainfoByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT datainfo_id,name,code,type_desc,pinyin,create_date,parent_id
+		FROM DATAINFO
+		where
+		<if test="parentId==null or parentId==''">
+			parent_id is null
+		</if>
+		<if test="parentId!=null and parentId!=''">
+			parent_id = #{parentId}
+		</if>
+		<if test="name!=null and name!=''">
+			and name like '%${name}%'
+		</if>
+		<if test="code!=null and code!=''">
+			and code like '%${code}%'
+		</if>
+		<if test="typeDesc!=null and typeDesc!=''">
+			and type_desc = #{typeDesc}
+		</if>
+		<if test="pinyin!=null and pinyin!=''">
+			and pinyin like CONCAT('%',#{pinyin},'%')
+		</if>
+	</select>
+
+	<select id="selectDatainfoByCodeAndPinyin"
+		resultMap="BaseResultMap">
+		select * from DATAINFO where parent_id=(select datainfo_id
+		from DATAINFO where code=#{0}) and pinyin=#{1}
+	</select>
+
+	<select id="selectDatainfoByParentcodeAndchildrencode"
+		resultMap="BaseResultMap">
+		select * from DATAINFO where parent_id=(select datainfo_id
+		from DATAINFO where code=#{0}) and code=#{1}
+	</select>
+	
+	<select id="selectDatainfoByParentcodeAndchildrencode1" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select * from DATAINFO where parent_id=(select datainfo_id
+		from DATAINFO where code=#{parentCode}) and code=#{childrenCode}
+	</select>
+
+	<select id="queryDataInfo" parameterType="java.util.Map"
+		resultType="com.chw.dao.model.system.Datainfo">
+		SELECT * FROM DATAINFO a where a.`code` = #{code}
+	</select>
+	
+	<select id="queryDatainfoByRole" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+			*
+		FROM
+			DATAINFO a
+		WHERE
+			a.parent_id = (
+				SELECT
+					datainfo_id
+				FROM
+					DATAINFO
+				WHERE
+					CODE = 'COUPON_USING_TYPE'
+			)
+			<if test="role=='Merchant'">
+				AND a.`code` != 'PHYSICAL_COUPONS'
+			</if>
+	</select>
+	<select id="getDataInfo" parameterType="com.chw.dao.model.system.Datainfo" resultMap="BaseResultMap">
+		SELECT
+			*
+		FROM
+			DATAINFO a
+		WHERE
+			a.parent_id = (
+				SELECT
+					datainfo_id
+				FROM
+					DATAINFO
+				WHERE
+					CODE = #{code}
+			)
+			
+			<if test="pinyin !=null and pinyin !=''">
+				AND a.pinyin = #{pinyin}
+			</if>
+	</select>
+
+</mapper>

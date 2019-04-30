@@ -1,0 +1,40 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /manager
+    
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://120.79.197.184:3308/ylhx?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: root,.
+
+    
+  #你可能会发现在默认配置下，thymeleaf对.html的内容要求很严格，比如<meta charset="UTF-8" />，
+  #如果少最后的标签封闭符号/，就会报错而转到错误页。也比如你在使用Vue.js这样的库，然后有<div v-cloak></div>这样的html代码，
+  #也会被thymeleaf认为不符合要求而抛出错误。
+  #因此，建议增加下面这段：
+  thymeleaf:
+    mode: HTML
+    #热部署文件，页面不产生缓存，及时更新
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+
+  mvc:
+    static-path-pattern: /static/**
+    
+  quartz:
+    enabled: true
+    
+mybatis:
+  mapperLocations: classpath:/mapper/**/*.xml
+  config-location: classpath:/config/mybatis-config.xml
+  
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
